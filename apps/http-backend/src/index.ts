@@ -3,52 +3,91 @@ import jwt  from "jsonwebtoken";
 import { JWT_SECRET } from '@repo/backend-common/config'
 import { middleware } from "./middleware";
 import {CreateRoom, CreateUserSchema, SigninSchema} from "@repo/common/types"
-import {prismaClient} from "@repo/db/client"
-const app = express();
+import {prismaClient} from "@repo/db/client";
 
-app.post('/signup', function (req,res){
+const app = express();
+app.use(express.json());
+app.post('/signup',  async function (req,res){
  
-   const data = CreateUserSchema.safeParse(req.body)
-   if(!data.success){
+   const PrasedData = CreateUserSchema.safeParse(req.body)
+   if(!PrasedData.success){
     res.json({
         message:"incorrect Inputs"
     })
     return;
    }
-     // db call
-   res.json({
-    userId:"123"
-   })
+   try {
+    await prismaClient.user.create({
+        data:{
+            email:PrasedData.data?.username,
+            password:PrasedData.data.password,
+            name:PrasedData.data.name,
+        }
+       })
+       res.json({
+        userId:"123"
+       })
+   } catch (error) {
+    
+   }
+ 
+   
 })
-app.post('/signin' , function(req,res){
-    const data = SigninSchema.safeParse(req.body)
-   if(!data.success){
+app.post('/signin' ,   async function(req,res){
+    const PrasedData = SigninSchema.safeParse(req.body)
+   if(!PrasedData.success){
     res.json({
         message:"incorrect Inputs"
     })
     return;
    }
-    const userId =1 ;
+   // todo: compare the hashedpasswords here
+   const user = await prismaClient.user.findFirst({
+    where:{
+        email:PrasedData.data.username,
+        password:PrasedData.data.password
+    }
+   })
+   if(!user){
+    res.status(403).json({
+        message:"Not authorized"
+    })
+   }
+   
     const token = jwt.sign({
-        userId
+        userId :user?.id
     },JWT_SECRET)
     res.json({
         token
     })
 
 })
-app.post('/createRoom' , middleware , function (req,res){
-    const data = CreateRoom.safeParse(req.body)
-   if(!data.success){
+app.post('/createRoom' , middleware ,  async function (req,res){
+    const PrasedData = CreateRoom.safeParse(req.body)
+   if(!PrasedData.success){
     res.json({
         message:"incorrect Inputs"
     })
     return;
    }
-       // db call
-       res.json({
-        roomId:123
-       })
+    // @ts-ignore // todo : fix this
+       const  userId= req.userId
+       try {
+        const room=  await prismaClient.room.create({
+            data:{
+                slug:PrasedData.data.name,
+                adminId:userId
+            }
+           })
+           res.json({
+            roomId: room.id
+           })
+       } catch (error) {
+        res.status(411).json({
+            message:"slug should be unique"
+        })
+       }
+    
 
 })
 
