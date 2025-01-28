@@ -11,15 +11,17 @@ app.post('/signup',  async function (req,res){
  
    const PrasedData = CreateUserSchema.safeParse(req.body)
    if(!PrasedData.success){
-    res.json({
-        message:"incorrect Inputs"
-    })
+    console.error("Validation errors:", PrasedData.error.errors); // Log validation issues
+  res.json({
+    message: "incorrect Inputs",
+    details: PrasedData.error.errors, // Include detailed errors for debugging
+  });
     return;
    }
    try {
     await prismaClient.user.create({
         data:{
-            email:PrasedData.data?.username,
+            email:PrasedData.data.username,
             password:PrasedData.data.password,
             name:PrasedData.data.name,
         }
@@ -28,7 +30,9 @@ app.post('/signup',  async function (req,res){
         userId:"123"
        })
    } catch (error) {
-    
+    console.error("Error creating user:", error); // Log error for debugging
+    // @ts-ignore
+  res.status(500).json({ message: "Failed to create user", error: error.message });
    }
  
    
