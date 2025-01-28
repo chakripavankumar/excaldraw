@@ -91,10 +91,23 @@ app.post('/createRoom' , middleware ,  async function (req,res){
             message:"slug should be unique"
         })
        }
-    
-
 })
 
+app.get("/chats/:roomId", async ( req, res) => {
+       const roomId = Number (req.params.roomId);
+       const messages = await prismaClient.room.findMany({
+        where:{
+            id:roomId
+        },
+        orderBy:{
+            id:"desc"
+        },
+        take :50
+       })
+       res.json({
+        messages
+       })
+})
 
 app.listen(3001, function(){
     console.log("listen sucefully on port 3001");
