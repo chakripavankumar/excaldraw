@@ -44,7 +44,7 @@ export default function Signup() {
         setErrors({ general: data.message || "Signup failed" });
       }
     } catch (e) {
-        console.log(e)
+      console.log(e)
       setErrors({ general: "Network error" });
     }
   };
