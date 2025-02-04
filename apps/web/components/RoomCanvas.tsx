@@ -14,7 +14,6 @@ export default function RoomCanvas({ roomId }: { roomId: string }) {
                 type: "join_room",
                 roomId
             });
-            console.log(data);
             ws.send(data);
         }
     },)

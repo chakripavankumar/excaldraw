@@ -32,7 +32,7 @@ export function Canvas({
         }
 
 
-    }, [canvasRef]);
+    }, [canvasRef, roomId, socket]);
 
     return <div style={{
         height: "100vh",

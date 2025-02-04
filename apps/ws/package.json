@@ -1,5 +1,5 @@
 {
-  "name": "ws",
+  "name": "ws-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,7 @@
   "dependencies": {
     "@repo/db": "workspace:*",
     "@types/jsonwebtoken": "^9.0.8",
+    "@types/ws": "^8.5.14",
     "esbuild-runner": "^2.2.2",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.0"

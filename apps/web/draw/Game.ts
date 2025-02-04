@@ -61,7 +61,6 @@ export class Game {
 
   async init() {
     this.existingShapes = await getExistingShapes(this.roomId);
-    console.log(this.existingShapes);
     this.clearCanvas();
   }
 
@@ -87,7 +86,6 @@ export class Game {
         this.ctx.strokeStyle = "rgba(255, 255, 255)";
         this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
       } else if (shape.type === "circle") {
-        console.log(shape);
         this.ctx.beginPath();
         this.ctx.arc(
           shape.centerX,
