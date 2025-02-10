@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import { IconButton } from "./IconButton"
 import { Circle, Pencil, RectangleHorizontalIcon } from "lucide-react";
@@ -34,18 +35,23 @@ export function Canvas({
 
     }, [canvasRef, roomId, socket]);
 
+    function clearCanvas(): void {
+        throw new Error("Function not implemented.");
+    }
+
     return <div style={{
         height: "100vh",
         overflow: "hidden"
     }}>
         <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
-        <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
+        <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} clearCanvas={clearCanvas} />
     </div>
 }
 
-function Topbar({ selectedTool, setSelectedTool }: {
+function Topbar({ selectedTool, setSelectedTool ,clearCanvas }: {
     selectedTool: Tool,
     setSelectedTool: (s: Tool) => void
+    clearCanvas :() => void
 }) {
     return <div style={{
         position: "fixed",
@@ -66,6 +72,7 @@ function Topbar({ selectedTool, setSelectedTool }: {
             <IconButton onClick={() => {
                 setSelectedTool("circle")
             }} activated={selectedTool === "circle"} icon={<Circle />}></IconButton>
+              <button style={{color: 'white'}} onClick={clearCanvas}>Delete canvas</button>
         </div>
     </div>
 }

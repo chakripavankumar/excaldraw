@@ -1,0 +1,10 @@
+{
+    "extends" : ["//"],
+    "tasks": {
+        "build":{
+            "dependsOn":["^build"],
+            "inputs" : ["#TURBO_DEFAULTS" ,".env"],
+            "outputs":["dist/**"]
+        }
+    }
+}

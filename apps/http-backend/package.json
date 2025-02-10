@@ -9,12 +9,18 @@
   },
   "dependencies": {
     "@repo/db": "workspace:*",
+    "@types/bcrypt": "^5.0.2",
+    "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.8",
+    "@types/nodemon": "^1.19.6",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "esbuild-runner": "^2.2.2",
     "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.9"
   },
   "devDependencies": {
     "@repo/backend-common": "workspace:*",

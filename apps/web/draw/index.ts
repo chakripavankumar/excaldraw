@@ -87,10 +87,8 @@ export async function initDraw(
     socket.send(
       JSON.stringify({
         type: "chat",
-        message: JSON.stringify({
-          shape,
-        }),
-        roomId,
+        message: JSON.stringify({shape, }),
+        roomId: Number(roomId)
       })
     );
   });

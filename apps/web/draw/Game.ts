@@ -142,7 +142,7 @@ export class Game {
         message: JSON.stringify({
           shape,
         }),
-        roomId: this.roomId,
+        roomId: Number(this.roomId),
       })
     );
   };
