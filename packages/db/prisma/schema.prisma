@@ -10,11 +10,11 @@ datasource db {
 }
 
 model User{
-  id              String @id @default(uuid())
+  id              Int @id @default(autoincrement())
   email           String @unique
   password        String
   name            String
-  photo           String?
+  profilePic      String?
   rooms           Room[]
   chats           Chat[]
 }
@@ -22,17 +22,16 @@ model User{
 model Room {
   id             Int @id @default(autoincrement())
   slug           String @unique
-  createAt       DateTime @default(now())
-  adminId        String
-  admin          User @relation(fields: [adminId],references: [id])
+  userId         Int
+  user           User @relation(fields: [userId],references: [id])
   chats          Chat[]
 }
 
 model Chat{
   id             Int @id @default(autoincrement())
-  roomId         Int
   message        String
-  userId         String
-  room           Room @relation(fields: [roomId],references: [id])
-  user           User @relation(fields: [userId],references: [id])
+  senderid       Int
+  roomid         Int
+  room           Room @relation(fields: [roomid],references: [id])
+  sender         User @relation(fields: [senderid],references: [id])
 }
