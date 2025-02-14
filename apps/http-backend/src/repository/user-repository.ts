@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { JWT_SECRET } from "@repo/backend-common/config";
 import jwt from "jsonwebtoken";
 import { prismaClient } from "@repo/db/client";
 import { NotFoundError, UnauthorizeError } from "../errorHandlers/client-error";
@@ -12,7 +13,7 @@ class UserRepository {
       const User = await prismaClient.user.create({
         data: { name: data.name, email: data.email, password: hashedPassword },
       });
-      const jwtToken = jwt.sign({ id: User }, "Pavan");
+      const jwtToken = jwt.sign({ id: User }, JWT_SECRET);
       console.log("token", jwtToken);
       console.log("user", User);
       return jwtToken;
@@ -34,7 +35,7 @@ class UserRepository {
       if (!isMathPassword) {
         throw new UnauthorizeError("Password did'nt matched");
       }
-      const jwtToken = jwt.sign({ id: user?.id }, "Pavan");
+      const jwtToken = jwt.sign({ id: user?.id }, JWT_SECRET);
       return jwtToken;
     } catch (error) {
       console.log("Error has occured at repository controller");

@@ -6,11 +6,7 @@ import Link from "next/link";
 
 export default function Signup() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    name: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,17 +27,17 @@ export default function Signup() {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/signup", {
+      const res = await fetch("http://localhost:3200/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
-      if (res.ok) {
-        router.push("/signin");
-      } else {
+      if (!res.ok) throw new Error(data.message || "Signup failed");
+       else {
         setErrors({ general: data.message || "Signup failed" });
+        router.push("/signin"); 
       }
     } catch (e) {
       console.log(e)
@@ -52,20 +48,20 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md p-6 bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-semibold text-center mb-4">Sign Up</h2>
+      <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+      {errors && <p className="text-red-500">{ errors}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
               type="email"
-              name="username"
+              name="email"
               placeholder="Email"
-              value={formData.username}
+              value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border rounded-md"
+              className="border p-2 rounded"
             />
             {errors.username && <p className="text-sm text-red-500">{errors.username}</p>}
           </div>
-
           <div>
             <input
               type="text"

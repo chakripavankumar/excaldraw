@@ -7,13 +7,10 @@ import { useState } from "react";
 
 export default function SignIn() {
     const router = useRouter();
-    const [formData, setFormData] = useState({ username: "", password: "" });
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-
-
         setFormData({
             ...formData, [e.target.name]: e.target.value
 
@@ -31,22 +28,19 @@ export default function SignIn() {
             return;
         }
         try {
-            const res = await fetch("http://localhost:3001/signin", {
+            const res = await fetch("http://localhost:3200/signin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData)
             });
             const data = await res.json();
-            if (res.ok) {
-                router.push("/")
-            } else {
-                setErrors({ general: data.message || "Signin failed" })
-            }
+            if (!res.ok) throw new Error(data.message || "Sign-in failed")
+            localStorage.setItem("token", data.token); 
+            router.push("/");
         } catch (error) {
             console.log(error)
             setErrors({ general: "Network error" });
         }
-
     }
     return (
         <div className=" min-h-screen flex items-center justify-center">
@@ -54,7 +48,7 @@ export default function SignIn() {
                 <h2 className=" text-2xl font-semibold text-center mb-4"> Sign In</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <input type="email" name="username" placeholder="Email" value={formData.username}
+                        <input type="email" name="email" placeholder="Email" value={formData.email}
                             onChange={handleChange} className="w-full p-2 border rounded-md" />
                         {errors.username && <p className="text-sm text-red-500"> {errors.username}</p>}
                     </div>

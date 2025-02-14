@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const CreateUserSchema = z.object({
-  username: z.string().email({ message: "Invalid email" }),
+  email: z.string().email({ message: "Invalid email" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
@@ -10,12 +10,12 @@ export const CreateUserSchema = z.object({
 });
 
 export const SigninSchema = z.object({
-  username: z.string().email({ message: "Invalid email" }),
+  email: z.string().email({ message: "Invalid email" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
 export const CreateRoom = z.object({
-  name: z.string().min(3).max(6),
+  slug: z.string().min(3).max(6),
 });
